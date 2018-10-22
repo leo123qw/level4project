@@ -74,13 +74,12 @@ he_coll_resize = resize()
 red=np.uint8([[[255,0,0]]]) #bgr
 hsv_red=cv2.cvtColor(red,cv2.COLOR_BGR2HSV)
 print (hsv_red)
-test = he_coll_resize[-1]
 for img in he_coll_resize:
 	hsv=cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 	lowper_red= np.array([102, 35,0])
 	upper_red=np.array([255,248,248])
 	mask=cv2.inRange(hsv,lowper_red,upper_red)
 	res=cv2.bitwise_and(img,img,mask=mask)
-cv2.imshow('Image',test)
+cv2.imshow('Image',img)
 cv2.imshow('mask',mask)
 cv2.waitKey(0)
