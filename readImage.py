@@ -1,32 +1,11 @@
+# -*- coding: UTF-8 -*-
 import skimage.io as io
 from skimage import data_dir
 import numpy as np
 import argparse
 import cv2
 import os
-#readImage into python
-# nki_traiig and vgh_traing need to be adjust when somepeople download from github.
-# nki_training = '/Users/macbookpro/desktop/level4project/EpiStromaTrainingImages/NKI_Training/*.jpg'
-# vgh_training = '/Users/macbookpro/desktop/level4project/EpiStromaTrainingImages/VGH_Training/*.jpg'
-# nki_coll = io.ImageCollection(nki_training)
-# vgh_coll = io.ImageCollection(vgh_training)
-# print (len(nki_coll)) #214 pics
-# print (len(vgh_coll)) #102 pics
-# io.imshow(nki_coll[107])
-# io.show()
 
-#separate the collection into he_image and normal image
-# nki_coll_he=[]
-# for i in range (len(nki_coll)/2,len(nki_coll)):
-# 	nki_he_image = nki_coll[i]
-# 	nki_coll_he.append(nki_he_image)
-# print (nki_coll_he)
-
-# vgh_coll_he=[]
-# for i in range (len(vgh_coll_he)/2,len(vgh_coll_he)):
-# 	vgh_he_image = vgh_coll[i]
-# 	vgh_coll_he.append(vgh_he_image)
-# print (vgh_coll_he)
 
 # #detect red
 # color = [
@@ -47,71 +26,61 @@ import os
 # cv2.imshow("images",np.hstack([nki_coll_he_image, output]))
 # cv2.waitKey(0)
 
-# def detect_color(img_path, mark_img_path):
-# 	"""" detect the different color region from the same image  """
-# 	image = cv2.imread(img_path) #load images
-# 	boundaries = [
-# 	([0,0,255],[0,0,255]), # red
-# 	([0,255,0],[0,255,0]), # green
-# 	([255,0,0],[255,0,0]), # blue
-# 	]
-# 	#look through the color range
-# 	for (lower, upper) in boundaries:
-# 		#create a numpy array based on the color range
-# 		lower = np.array(lower, dtype = "uint8")
-# 		upper = np.array(upper, dtype = "uint8")
 
-# 		# create a mask based on specific color range
-# 		mask =cv2.inRange(image, lower, upper)
-# 		output = cv2.bitwise_and(image, image, mask = mask)
+#readImage into python
+#nki_traiig and vgh_traing need to be adjust when somepeople download from github.
+nki_training = '/Users/macbookpro/desktop/level4project/images/EpiStromaTrainingImages/NKI_Training/*.jpg'
+vgh_training = '/Users/macbookpro/desktop/level4project/images/EpiStromaTrainingImages/VGH_Training/*.jpg'
+nki_coll = io.ImageCollection(nki_training)
+vgh_coll = io.ImageCollection(vgh_training)
+print (len(nki_coll)) #214 pics
+print (len(vgh_coll)) #102 pics
 
 
-# 		mark_zone_with_color(output, mark_img_path, lower)
-# def mark_zone_with_color(src_img, mark_img, mark_color):
+#separate the collection into he_image and normal image
+def nki_coll_he():
+	nki_coll_he=[]
+	for i in range (len(nki_coll)/2,len(nki_coll)):
+		nki_he_image = nki_coll[i]
+		#res=cv2.resize(nki_he_image,None,fx=0.3,fy=0.3,interpolation=cv2.INTER_CUBIC)
+		nki_coll_he.append(nki_he_image)
+		# cv2.imshow('m',res)
+	return nki_coll_he
+	
+def vgh_coll_he():
+	vgh_coll_he=[]
+	for i in range (len(vgh_coll)/2,len(vgh_coll)):
+		vgh_he_image = vgh_coll[i]
+		#res=cv2.resize(vgh_he_image,None,fx=0.3,fy=0.3,interpolation=cv2.INTER_CUBIC)
+		vgh_coll_he.append(vgh_he_image)
+		
+	return vgh_coll_he
 
-# 	# convert to gray color
-# 	gray = cv2.cvtColor(src_img, cv2.COLOR_BGR2GRAY)
+def resize():
+	he_coll_resize=[]
+	he_coll = nki_coll_he + vgh_coll_he
+	for i in he_coll:
+		res=cv2.resize(i,None,fx=0.3,fy=0.3,interpolation=cv2.INTER_CUBIC)
+		he_coll_resize.append(res)
 
-# 	ret, binary =  cv2,threahold(gray, 0, 255, cv2.THRESH_BINARY) #just scrach the contour
+	return he_coll_resize
 
-# 	#contour detection
-# 	_,contours, hierarchy = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+#----------------------main --------------------------------------
+nki_coll_he = nki_coll_he()
+vgh_coll_he = vgh_coll_he()
 
-# 	newImg = cv2.imread(mark_img)
-# 	newImg = cv2.resize(newImg, (512, 512))
+he_coll_resize = resize()
 
-# 	#drawing
-# 	for i in range (len(contours) - 1):
-# 		cv2.drawContours(image = newImg, contours = contours[i+1], contourIdx= -1, color = tuple(mark_color.tolist()), thickness = 2, maxlevel = 1, linetype = 8)
-
-# 	cv2.imwrite(mark_img, newImg)
-
-# def batch_marker(src_img_dir, draw_contours_img_dir):
-# 	src_imgs = get_filenames_in_dir(src_img_dir)
-# 	dc_imgs = get_filenames_in_dir(draw_contours_img_dir)
-
-# 	for src in src_imgs:
-# 		for dc in dc_imgs:
-# 			if src == dc:
-# 				detect_color(os.path.join(src_img_dir, src), os.path.join(draw_contours_img_dir, dc))
- 
-# def get_filenames_in_dir(dir):
-# 	""" get all of the file name in the same dir """
-# 	for root, dirs, files in os.walk(dir):
-# 		return files
-
-
-red=np.uint8([[[0,0,255]]])
+red=np.uint8([[[255,0,0]]]) #bgr
 hsv_red=cv2.cvtColor(red,cv2.COLOR_BGR2HSV)
-print hsv_red
-img=cv2.imread("/Users/macbookpro/desktop/level4project/EpiStromaTrainingImages/NKI_Training/3_114_2_5.jpg")
-res=cv2.resize(img,None,fx=0.3,fy=0.3,interpolation=cv2.INTER_CUBIC)
-cv2.imshow('m',res)
-hsv=cv2.cvtColor(res,cv2.COLOR_BGR2HSV)
-lower_red=np.array([170,100,100])
-upper_red=np.array([180,255,255])
-mask=cv2.inRange(hsv,lower_red,upper_red)
-res=cv2.bitwise_and(res,res,mask=mask)
-cv2.imshow('frame',res)
+print (hsv_red)
+test = he_coll_resize[-1]
+for img in he_coll_resize:
+	hsv=cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
+	lowper_red= np.array([102, 35,0])
+	upper_red=np.array([255,248,248])
+	mask=cv2.inRange(hsv,lowper_red,upper_red)
+	res=cv2.bitwise_and(img,img,mask=mask)
+cv2.imshow('Image',test)
 cv2.imshow('mask',mask)
 cv2.waitKey(0)
