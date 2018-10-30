@@ -17,8 +17,6 @@ def readfilename(path, allfile):
 
 if __name__ =='__main__':
     path1= '/Users/macbookpro/desktop/level4project/images/EpiStromaTrainingImages/NKI_Training'
-    path2 = '/Users/macbookpro/desktop/level4project/images/EpiStromaTrainingImages/NKI_Training'
-    path3 = '/Users/macbookpro/desktop/level4project/images/EpiStromaTrainingImages/NKI_Training'
     allfile1 = []
     allfile1 = readfilename(path1,allfile1)
     allname1 = []
@@ -27,14 +25,16 @@ if __name__ =='__main__':
     for name1 in allfile1:
         #print name1
         t1 = name1.split(".")[0].split("/")[-1].split("_")
-        print t1
         allname1.append(t1)
-
         if t1[0] == "0":
+            print("----------")
             for name2 in allfile1:
                 t2 =name2.split(".")[0].split("/")[-1].split("_")
-                if t1[1:] == t2[0:]:
-                    t1=t2
+
+                if t1[1:] == t2:
+                    t1==t2
                     print t1,t2
+                
 
     print("----------------")
+
