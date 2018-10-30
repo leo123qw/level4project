@@ -35,7 +35,8 @@ nki_coll = io.ImageCollection(nki_training)
 vgh_coll = io.ImageCollection(vgh_training)
 print (len(nki_coll)) #214 pics
 print (len(vgh_coll)) #102 pics
-
+for i in range(len(nki_coll)):
+	k=nki_coll[i]
 
 #separate the collection into he_image and normal image
 def nki_coll_he():
@@ -44,7 +45,7 @@ def nki_coll_he():
 		nki_he_image = nki_coll[i]
 		#res=cv2.resize(nki_he_image,None,fx=0.3,fy=0.3,interpolation=cv2.INTER_CUBIC)
 		nki_coll_he.append(nki_he_image)
-		# cv2.imshow('m',res)
+		#cv2.imshow('m',res)
 	return nki_coll_he
 	
 def vgh_coll_he():
@@ -81,5 +82,6 @@ for img in he_coll_resize:
 	mask=cv2.inRange(hsv,lowper_red,upper_red)
 	res=cv2.bitwise_and(img,img,mask=mask)
 cv2.imshow('Image',img)
+cv2.imshow("Image1",k)
 cv2.imshow('mask',mask)
 cv2.waitKey(0)
